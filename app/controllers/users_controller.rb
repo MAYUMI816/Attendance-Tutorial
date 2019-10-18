@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def index
     @users = User.paginate(page: params[:page])
   end
-  
+
   def show
   end
 
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       render :edit      
     end
   end
-  
+
   def destroy
     @user.destroy
     flash[:success] = "#{@user.name}のデータを削除しました。"
@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
     end
 
     # beforeフィルター
@@ -59,7 +59,7 @@ class UsersController < ApplicationController
 
     # ログイン済みのユーザーか確認します。
     def logged_in_user
-      unless logged_in? 
+      unless logged_in?
         store_location
         flash[:danger] = "ログインしてください。"
         redirect_to login_url
@@ -69,8 +69,8 @@ class UsersController < ApplicationController
     # アクセスしたユーザーが現在ログインしているユーザーか確認します。
     def correct_user
       redirect_to(root_url) unless current_user?(@user)
-    end 
-    
+    end
+
     # システム管理権限所有かどうか判定します。
     def admin_user
       redirect_to root_url unless current_user.admin?
